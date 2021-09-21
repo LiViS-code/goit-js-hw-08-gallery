@@ -9,14 +9,15 @@ const ref = {
 };
 
 const onClick = (e) => {
-  if (e.target.nodeName === "IMG") e.preventDefault();
+  if (e.target.nodeName !== "IMG") return;
+  e.preventDefault();
+  openModal();
   ref.lightboxImage.src = e.target.dataset.source;
   ref.lightboxImage.alt = e.target.alt;
 };
 
 const openModal = () => {
   ref.lightbox.classList.add("is-open");
-  ref.gallery.removeEventListener("click", openModal);
   ref.btnClose.addEventListener("click", closeModal);
   ref.lightboxOverlay.addEventListener("click", closeModal);
 };
@@ -25,7 +26,6 @@ const closeModal = () => {
   ref.lightbox.classList.remove("is-open");
   ref.btnClose.removeEventListener("click", closeModal);
   ref.lightboxOverlay.removeEventListener("click", closeModal);
-  ref.gallery.addEventListener("click", openModal);
   ref.lightboxImage.src = "";
   ref.lightboxImage.alt = "";
 };
@@ -57,4 +57,3 @@ ref.gallery.insertAdjacentHTML("afterbegin", imgMarkup);
 
 // делегируем нажатия на элементах галереи
 ref.gallery.addEventListener("click", onClick);
-ref.gallery.addEventListener("click", openModal);
