@@ -5,6 +5,7 @@ const ref = {
   lightbox: document.querySelector(".js-lightbox"),
   btnClose: document.querySelector('button[data-action="close-lightbox"]'),
   lightboxImage: document.querySelector(".lightbox__image"),
+  lightboxOverlay: document.querySelector(".lightbox__overlay"),
 };
 
 const onClick = (e) => {
@@ -17,11 +18,13 @@ const openModal = () => {
   ref.lightbox.classList.add("is-open");
   ref.gallery.removeEventListener("click", openModal);
   ref.btnClose.addEventListener("click", closeModal);
+  ref.lightboxOverlay.addEventListener("click", closeModal);
 };
 
 const closeModal = () => {
   ref.lightbox.classList.remove("is-open");
   ref.btnClose.removeEventListener("click", closeModal);
+  ref.lightboxOverlay.removeEventListener("click", closeModal);
   ref.gallery.addEventListener("click", openModal);
   ref.lightboxImage.src = "";
   ref.lightboxImage.alt = "";
