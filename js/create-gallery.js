@@ -8,7 +8,7 @@ const ref = {
   lightboxOverlay: document.querySelector(".lightbox__overlay"),
 };
 
-const onClick = (e) => {
+const handlerClick = (e) => {
   if (e.target.nodeName !== "IMG") return;
   e.preventDefault();
   openModal();
@@ -20,9 +20,19 @@ const openModal = () => {
   ref.lightbox.classList.add("is-open");
   ref.btnClose.addEventListener("click", closeModal);
   ref.lightboxOverlay.addEventListener("click", closeModal);
+  window.addEventListener("keydown", closeModal);
 };
 
-const closeModal = () => {
+const closeModal = (e) => {
+  if (
+    !(
+      e.key === "Escape" ||
+      e.target.className === "lightbox__button" ||
+      e.target.className === "lightbox__overlay"
+    )
+  )
+    return;
+
   ref.lightbox.classList.remove("is-open");
   ref.btnClose.removeEventListener("click", closeModal);
   ref.lightboxOverlay.removeEventListener("click", closeModal);
@@ -56,4 +66,4 @@ const imgMarkup = new Array(moduleGallery.galleryItems.length)
 ref.gallery.insertAdjacentHTML("afterbegin", imgMarkup);
 
 // делегируем нажатия на элементах галереи
-ref.gallery.addEventListener("click", onClick);
+ref.gallery.addEventListener("click", handlerClick);
