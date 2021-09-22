@@ -53,18 +53,22 @@ const leafOver = (key) => {
     (link) => link.original === imgCurrentLink
   );
   let nextIndex;
-  if (key === "ArrowRight") {
-    nextIndex =
-      currentIndex < imgCount - 1
-        ? (nextIndex = currentIndex + 1)
-        : (nextIndex = 0);
+
+  switch (key) {
+    case "ArrowRight":
+      nextIndex =
+        currentIndex < imgCount - 1
+          ? (nextIndex = currentIndex + 1)
+          : (nextIndex = 0);
+      break;
+    case "ArrowLeft":
+      nextIndex =
+        currentIndex > 0
+          ? (nextIndex = currentIndex - 1)
+          : (nextIndex = imgCount - 1);
+      break;
   }
-  if (key === "ArrowLeft") {
-    nextIndex =
-      currentIndex > 0
-        ? (nextIndex = currentIndex - 1)
-        : (nextIndex = imgCount - 1);
-  }
+
   uploadPictures(
     moduleGallery.galleryItems[nextIndex].original,
     moduleGallery.galleryItems[nextIndex].description
