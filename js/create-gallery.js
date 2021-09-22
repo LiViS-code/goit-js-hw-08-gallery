@@ -21,7 +21,7 @@ const openModal = (img) => {
   uploadPictures(img.dataset.source, img.alt);
   ref.btnClose.addEventListener("click", closeModal);
   ref.lightboxOverlay.addEventListener("click", closeModal);
-  window.addEventListener("keydown", _.throttle(closeModal.bind(img), 500));
+  window.addEventListener("keydown", _.debounce(closeModal.bind(img), 300));
 };
 
 function uploadPictures(src, alt) {
