@@ -58,23 +58,17 @@ const leafOver = (key) => {
       currentIndex < imgCount - 1
         ? (nextIndex = currentIndex + 1)
         : (nextIndex = 0);
-
-    uploadPictures(
-      moduleGallery.galleryItems[nextIndex].original,
-      moduleGallery.galleryItems[nextIndex].description
-    );
   }
   if (key === "ArrowLeft") {
     nextIndex =
       currentIndex > 0
         ? (nextIndex = currentIndex - 1)
         : (nextIndex = imgCount - 1);
-
-    uploadPictures(
-      moduleGallery.galleryItems[nextIndex].original,
-      moduleGallery.galleryItems[nextIndex].description
-    );
   }
+  uploadPictures(
+    moduleGallery.galleryItems[nextIndex].original,
+    moduleGallery.galleryItems[nextIndex].description
+  );
 };
 
 // сформировать массив шаблонных строк с разметкой согласно шаблона
