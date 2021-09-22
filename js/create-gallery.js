@@ -1,7 +1,10 @@
+// получить картинки
 import * as moduleGallery from "./app.js";
 
+// количество картинок
 const imgCount = moduleGallery.galleryItems.length;
 
+// ссылки на элементы HTML
 const ref = {
   gallery: document.querySelector(".js-gallery"),
   lightbox: document.querySelector(".js-lightbox"),
@@ -10,12 +13,14 @@ const ref = {
   lightboxOverlay: document.querySelector(".lightbox__overlay"),
 };
 
+// обработчик событий
 const handlerClick = (e) => {
   if (e.target.nodeName !== "IMG") return;
   e.preventDefault();
   openModal(e.target);
 };
 
+// открыть модалку
 const openModal = (img) => {
   ref.lightbox.classList.add("is-open");
   uploadPictures(img.dataset.source, img.alt);
@@ -24,12 +29,14 @@ const openModal = (img) => {
   window.addEventListener("keydown", _.debounce(closeModal.bind(img), 300));
 };
 
+// загрузить картинку
 function uploadPictures(src, alt) {
   ref.lightboxImage.src = src;
   ref.lightboxImage.alt = alt;
   return;
 }
 
+// закрыть модалку
 const closeModal = (e) => {
   const triggers = [
     "Escape",
@@ -38,8 +45,11 @@ const closeModal = (e) => {
     "lightbox__button",
     "lightbox__overlay",
   ];
+
   if (!triggers.includes(e.key || e.target.className)) return;
+
   if (e.key === "ArrowRight" || e.key === "ArrowLeft") return leafOver(e.key);
+
   ref.lightbox.classList.remove("is-open");
   ref.btnClose.removeEventListener("click", closeModal);
   ref.lightboxOverlay.removeEventListener("click", closeModal);
@@ -47,6 +57,7 @@ const closeModal = (e) => {
   ref.lightboxImage.alt = "";
 };
 
+// листать картинки стрелками
 const leafOver = (key) => {
   const imgCurrentLink = document.querySelector(".lightbox__image").src;
   const currentIndex = moduleGallery.galleryItems.findIndex(
