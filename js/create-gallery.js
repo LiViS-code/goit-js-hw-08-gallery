@@ -13,6 +13,34 @@ const ref = {
   lightboxOverlay: document.querySelector(".lightbox__overlay"),
 };
 
+// сформировать массив шаблонных строк с разметкой согласно шаблона
+const imgMarkup = new Array(imgCount)
+  .fill(0)
+  .map((_, i) => {
+    return `
+    <li class="gallery__item">
+    <a
+      class="gallery__link"
+      href=${moduleGallery.galleryItems[i].original}
+    >
+      <img
+        class="gallery__image"
+        src=${moduleGallery.galleryItems[i].preview}
+        data-source=${moduleGallery.galleryItems[i].original}
+        alt=${moduleGallery.galleryItems[i].description}
+      />
+    </a>
+  </li>
+  `;
+  })
+  .join("");
+
+// рендер разметки в DOM
+ref.gallery.insertAdjacentHTML("afterbegin", imgMarkup);
+
+// делегируем нажатия на элементах галереи
+ref.gallery.addEventListener("click", handlerClick);
+
 // обработчик событий
 function handlerClick(e) {
   if (e.target.nodeName !== "IMG") return;
@@ -21,12 +49,12 @@ function handlerClick(e) {
 }
 
 // открыть модалку
-function openModal(img) {
+function openModal(e) {
   ref.lightbox.classList.add("is-open");
-  uploadPictures(img.dataset.source, img.alt);
+  uploadPictures(e.dataset.source, e.alt);
   ref.btnClose.addEventListener("click", closeModal);
   ref.lightboxOverlay.addEventListener("click", closeModal);
-  window.addEventListener("keyup", _.throttle(closeModal.bind(img), 300));
+  window.addEventListener("keyup", _.throttle(closeModal.bind(e), 300));
 }
 
 // загрузить картинку
@@ -83,31 +111,3 @@ function leafOver(key) {
     moduleGallery.galleryItems[nextIndex].description
   );
 }
-
-// сформировать массив шаблонных строк с разметкой согласно шаблона
-const imgMarkup = new Array(imgCount)
-  .fill(0)
-  .map((_, i) => {
-    return `
-    <li class="gallery__item">
-    <a
-      class="gallery__link"
-      href=${moduleGallery.galleryItems[i].original}
-    >
-      <img
-        class="gallery__image"
-        src=${moduleGallery.galleryItems[i].preview}
-        data-source=${moduleGallery.galleryItems[i].original}
-        alt=${moduleGallery.galleryItems[i].description}
-      />
-    </a>
-  </li>
-  `;
-  })
-  .join("");
-
-// рендер разметки в DOM
-ref.gallery.insertAdjacentHTML("afterbegin", imgMarkup);
-
-// делегируем нажатия на элементах галереи
-ref.gallery.addEventListener("click", handlerClick);
