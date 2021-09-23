@@ -5,12 +5,12 @@ import * as moduleGallery from "./app.js";
 const imgCount = moduleGallery.galleryItems.length;
 
 // ссылки на элементы HTML
-const ref = {
+const refs = {
   gallery: document.querySelector(".js-gallery"),
   lightbox: document.querySelector(".js-lightbox"),
   btnClose: document.querySelector('button[data-action="close-lightbox"]'),
   lightboxImage: document.querySelector(".lightbox__image"),
-  lightboxOverlay: document.querySelector(".lightbox__overlay"),
+  lightboxOgverlay: document.querySelector(".lightbox__overlay"),
 };
 
 // сформировать массив шаблонных строк с разметкой согласно шаблона
@@ -36,31 +36,35 @@ const imgMarkup = new Array(imgCount)
   .join("");
 
 // рендер разметки в DOM
-ref.gallery.insertAdjacentHTML("afterbegin", imgMarkup);
+refs.gallery.insertAdjacentHTML("afterbegin", imgMarkup);
 
 // делегируем нажатия на элементах галереи
-ref.gallery.addEventListener("click", handlerClick);
+refs.gallery.addEventListener("click", handlerClick);
+refs.gallery.addEventListener("keydown", _.throttle(closeModal, 300));
 
 // обработчик событий
 function handlerClick(e) {
   if (e.target.nodeName !== "IMG") return;
+
   e.preventDefault();
+
   openModal(e.target);
 }
 
 // открыть модалку
 function openModal(e) {
-  ref.lightbox.classList.add("is-open");
+  refs.lightbox.classList.add("is-open");
   uploadPictures(e.dataset.source, e.alt);
-  ref.btnClose.addEventListener("click", closeModal);
-  ref.lightboxOverlay.addEventListener("click", closeModal);
-  window.addEventListener("keyup", _.throttle(closeModal.bind(e), 300));
+
+  // слушатели для закрытия модалки
+  refs.btnClose.addEventListener("click", closeModal);
+  refs.lightboxOgverlay.addEventListener("click", closeModal);
 }
 
 // загрузить картинку
 function uploadPictures(src, alt) {
-  ref.lightboxImage.src = src;
-  ref.lightboxImage.alt = alt;
+  refs.lightboxImage.src = src;
+  refs.lightboxImage.alt = alt;
 }
 
 // закрыть модалку
@@ -77,9 +81,12 @@ function closeModal(e) {
 
   if (e.key === "ArrowRight" || e.key === "ArrowLeft") return leafOver(e.key);
 
-  ref.lightbox.classList.remove("is-open");
-  ref.btnClose.removeEventListener("click", closeModal);
-  ref.lightboxOverlay.removeEventListener("click", closeModal);
+  refs.lightbox.classList.remove("is-open");
+
+  // убрать слушателей с модалки
+  refs.btnClose.removeEventListener("click", closeModal);
+  refs.lightboxOgverlay.removeEventListener("click", closeModal);
+
   uploadPictures("", "");
 }
 
@@ -89,25 +96,25 @@ function leafOver(key) {
   const currentIndex = moduleGallery.galleryItems.findIndex(
     (link) => link.original === imgCurrentLink
   );
-  let nextIndex;
+  let newIndex;
 
   switch (key) {
     case "ArrowRight":
-      nextIndex =
+      newIndex =
         currentIndex < imgCount - 1
-          ? (nextIndex = currentIndex + 1)
-          : (nextIndex = 0);
+          ? (newIndex = currentIndex + 1)
+          : (newIndex = 0);
       break;
     case "ArrowLeft":
-      nextIndex =
+      newIndex =
         currentIndex > 0
-          ? (nextIndex = currentIndex - 1)
-          : (nextIndex = imgCount - 1);
+          ? (newIndex = currentIndex - 1)
+          : (newIndex = imgCount - 1);
       break;
   }
 
-  return uploadPictures(
-    moduleGallery.galleryItems[nextIndex].original,
-    moduleGallery.galleryItems[nextIndex].description
+  uploadPictures(
+    moduleGallery.galleryItems[newIndex].original,
+    moduleGallery.galleryItems[newIndex].description
   );
 }
