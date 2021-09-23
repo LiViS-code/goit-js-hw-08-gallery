@@ -14,20 +14,20 @@ const ref = {
 };
 
 // обработчик событий
-const handlerClick = (e) => {
+function handlerClick(e) {
   if (e.target.nodeName !== "IMG") return;
   e.preventDefault();
   openModal(e.target);
-};
+}
 
 // открыть модалку
-const openModal = (img) => {
+function openModal(img) {
   ref.lightbox.classList.add("is-open");
   uploadPictures(img.dataset.source, img.alt);
   ref.btnClose.addEventListener("click", closeModal);
   ref.lightboxOverlay.addEventListener("click", closeModal);
   window.addEventListener("keyup", _.throttle(closeModal.bind(img), 300));
-};
+}
 
 // загрузить картинку
 function uploadPictures(src, alt) {
@@ -36,7 +36,7 @@ function uploadPictures(src, alt) {
 }
 
 // закрыть модалку
-const closeModal = (e) => {
+function closeModal(e) {
   const triggers = [
     "Escape",
     "ArrowRight",
@@ -53,10 +53,10 @@ const closeModal = (e) => {
   ref.btnClose.removeEventListener("click", closeModal);
   ref.lightboxOverlay.removeEventListener("click", closeModal);
   uploadPictures("", "");
-};
+}
 
 // листать картинки стрелками
-const leafOver = (key) => {
+function leafOver(key) {
   const imgCurrentLink = document.querySelector(".lightbox__image").src;
   const currentIndex = moduleGallery.galleryItems.findIndex(
     (link) => link.original === imgCurrentLink
@@ -82,7 +82,7 @@ const leafOver = (key) => {
     moduleGallery.galleryItems[nextIndex].original,
     moduleGallery.galleryItems[nextIndex].description
   );
-};
+}
 
 // сформировать массив шаблонных строк с разметкой согласно шаблона
 const imgMarkup = new Array(imgCount)
