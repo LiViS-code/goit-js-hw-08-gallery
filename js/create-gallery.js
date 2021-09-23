@@ -26,14 +26,13 @@ const openModal = (img) => {
   uploadPictures(img.dataset.source, img.alt);
   ref.btnClose.addEventListener("click", closeModal);
   ref.lightboxOverlay.addEventListener("click", closeModal);
-  window.addEventListener("keydown", _.debounce(closeModal.bind(img), 300));
+  window.addEventListener("keyup", _.throttle(closeModal.bind(img), 300));
 };
 
 // загрузить картинку
 function uploadPictures(src, alt) {
   ref.lightboxImage.src = src;
   ref.lightboxImage.alt = alt;
-  return;
 }
 
 // закрыть модалку
@@ -53,8 +52,7 @@ const closeModal = (e) => {
   ref.lightbox.classList.remove("is-open");
   ref.btnClose.removeEventListener("click", closeModal);
   ref.lightboxOverlay.removeEventListener("click", closeModal);
-  ref.lightboxImage.src = "";
-  ref.lightboxImage.alt = "";
+  uploadPictures("", "");
 };
 
 // листать картинки стрелками
@@ -80,7 +78,7 @@ const leafOver = (key) => {
       break;
   }
 
-  uploadPictures(
+  return uploadPictures(
     moduleGallery.galleryItems[nextIndex].original,
     moduleGallery.galleryItems[nextIndex].description
   );
