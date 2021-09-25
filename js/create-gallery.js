@@ -54,11 +54,22 @@ function handlerClick(e) {
 // открыть модалку
 function openModal(e) {
   refs.lightbox.classList.add("is-open");
+
   uploadPictures(e.dataset.source, e.alt);
 
-  // слушатели для закрытия модалки
+  addModalListener();
+}
+
+// слушать события в модалке
+function addModalListener() {
   refs.btnClose.addEventListener("click", closeModal);
   refs.lightboxOgverlay.addEventListener("click", closeModal);
+}
+
+// убрать прослушку с модалки
+function removeModalListener() {
+  refs.btnClose.removeEventListener("click", closeModal);
+  refs.lightboxOgverlay.removeEventListener("click", closeModal);
 }
 
 // загрузить картинку
@@ -83,9 +94,7 @@ function closeModal(e) {
 
   refs.lightbox.classList.remove("is-open");
 
-  // убрать слушателей с модалки
-  refs.btnClose.removeEventListener("click", closeModal);
-  refs.lightboxOgverlay.removeEventListener("click", closeModal);
+  removeModalListener();
 
   uploadPictures("", "");
 }
